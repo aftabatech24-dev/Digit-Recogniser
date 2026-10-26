@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A local machine-learning handwritten digit recognizer.">
+    <title>DigitLab — Handwritten Digit Recognition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <main class="page-shell">
+      <nav class="topbar" aria-label="Main navigation">
+        <a class="brand" href="#top"><span class="brand-symbol">⌁</span> DigitLab</a>
+        <span class="model-status"><i></i> MODEL ONLINE</span>
+      </nav>
+
+      <section class="hero" id="top">
+        <p class="eyebrow">COMPUTER VISION DEMO</p>
+        <h1>Handwritten digit<br>recognition.</h1>
+        <p>Draw a number from 0 to 9, or upload a clear photo. The local KNN model identifies the digit and shows its confidence.</p>
+      </section>
+
+      <section class="app-grid" aria-label="Digit recognition workspace">
+        <section class="drawing-card">
+          <div class="section-heading">
+            <div>
+              <p class="label">INPUT</p>
+              <h2>Write a single digit</h2>
+            </div>
+            <span class="hint">0 — 9 only</span>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="drawing-canvas" width="480" height="480" aria-label="Drawing surface for a handwritten digit"></canvas>
+            <span class="canvas-corner top-left"></span><span class="canvas-corner top-right"></span>
+            <span class="canvas-corner bottom-left"></span><span class="canvas-corner bottom-right"></span>
+          </div>
+
+          <div class="canvas-controls">
+            <button type="button" id="clear-button" class="secondary-button">Clear canvas</button>
+            <input id="image-upload" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+            <button type="button" id="upload-button" class="upload-button">Upload photo</button>
+          </div>
+
+          <div class="check-row">
+            <div>
+              <label for="expected-digit">Expected digit <span>optional</span></label>
+              <input id="expected-digit" inputmode="numeric" min="0" max="9" maxlength="1" placeholder="e.g. 4" type="number">
+            </div>
+            <button type="button" id="predict-button" class="predict-button">Recognize digit <span>→</span></button>
+          </div>
+        </section>
+
+        <aside id="result-card" class="result-card" aria-live="polite">
+          <div id="empty-state" class="empty-state">
+            <div class="digit-placeholder">?</div>
+            <h2>Ready to recognize</h2>
+            <p>Draw a clear, centred digit and let the model inspect it.</p>
+          </div>
+
+          <div id="result-state" hidden>
+            <p class="label">MODEL PREDICTION</p>
+            <div class="prediction-block">
+              <span class="prediction-label">Detected digit</span>
+              <strong id="prediction-number">0</strong>
+            </div>
+
+            <div class="confidence">
+              <div><span>Confidence</span><strong id="confidence-number">0%</strong></div>
+              <div class="progress-track"><div id="confidence-fill" class="progress-fill"></div></div>
+            </div>
+
+            <div id="comparison" class="comparison" hidden></div>
+
+            <div class="model-accuracy">
+              <span>Model Accuracy</span><strong id="model-accuracy">—</strong>
+            </div>
+
+            <div class="alternatives">
+              <p>Other possibilities</p>
+              <div id="prediction-list" class="prediction-list"></div>
+            </div>
+            <p class="disclaimer">Trained on the built-in handwritten-digit dataset. Use a large, centred digit for the best result.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="details" aria-label="How the project works">
+        <div><span>01</span><h3>Capture</h3><p>Use the writing pad or a photo of a single handwritten digit.</p></div>
+        <div><span>02</span><h3>Normalize</h3><p>The app centres and scales the drawing before model prediction.</p></div>
+        <div><span>03</span><h3>Predict</h3><p>A KNN classifier compares your drawing to the closest examples and scores each digit from zero through nine.</p></div>
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
